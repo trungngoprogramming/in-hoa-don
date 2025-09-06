@@ -43,8 +43,15 @@ class InvoiceScreen extends ConsumerWidget {
   Future<Uint8List> _generatePdf(InvoiceModel invoice) async {
     final pdf = pw.Document();
     
-    // Tải font hỗ trợ tiếng Việt
-    final font = await PdfGoogleFonts.robotoRegular();
+    // Sử dụng font mặc định hoặc fallback font cho Android
+    pw.Font? font;
+    try {
+      font = await PdfGoogleFonts.robotoRegular();
+    } catch (e) {
+      // Fallback to default font nếu không thể tải Google Font
+      print('Cannot load Google Font, using default font: $e');
+      font = null;
+    }
     
     pdf.addPage(
       pw.Page(
@@ -58,8 +65,8 @@ class InvoiceScreen extends ConsumerWidget {
               pw.Center(
                 child: pw.Text(
                   'BÁNH KẸO HÙNG CHÍNH',
-                  style: pw.TextStyle(
-                    fontSize: 16,
+                  style: _createTextStyle(
+                    fontSize: 20,
                     fontWeight: pw.FontWeight.bold,
                     font: font,
                   ),
@@ -71,20 +78,29 @@ class InvoiceScreen extends ConsumerWidget {
               // Company Info
               pw.Text(
                 'ĐC: 139/1 Tôn Đản, TP. Đà Nẵng * ĐT: 0905070472 - 0344678772',
-                style: pw.TextStyle(fontSize: 8, font: font),
+                style: _createTextStyle(
+                fontSize: 12,
+                font: font,
+                ),
                 textAlign: pw.TextAlign.center,
               ),
               
               pw.SizedBox(height: 3),
               
               pw.Text(
-                'Chuyên bán: BÁNH ĐẬU XANH, BÁNH DỪA NƯỚNG, KHÔ MÈ, MÈ XỬNG, KẸO ĐẬU, KẸO DỒI,',
-                style: pw.TextStyle(fontSize: 8, font: font),
+                'Chuyên bán: BÁNH ĐẬU XANH, BÁNH DỪA NƯỚNG, KHÔ MÈ, MÈ XỬNG, KẸO ĐẬU,',
+                style: _createTextStyle(
+                  fontSize: 10,
+                  font: font,
+                ),
                 textAlign: pw.TextAlign.center,
               ),
               pw.Text(
-                'BẮP, NUI, ME, CỐM, THÈO LÈO, CHUỐI SẤY, BÁNH THÁNH, BÁNH MEN...',
-                style: pw.TextStyle(fontSize: 8, font: font),
+                'KẸO DỒI, BẮP, NUI, ME, CỐM, THÈO LÈO, CHUỐI SẤY, BÁNH THÁNH, BÁNH MEN...',
+                style: _createTextStyle(
+                  fontSize: 10,
+                  font: font,
+                ),
                 textAlign: pw.TextAlign.center,
               ),
               
@@ -96,11 +112,17 @@ class InvoiceScreen extends ConsumerWidget {
                 children: [
                   pw.Text(
                     'Khách hàng: ${invoice.customerName}',
-                    style: pw.TextStyle(fontSize: 10, font: font),
+                    style: _createTextStyle(
+                      fontSize: 10,
+                      font: font,
+                    ),
                   ),
                   pw.Text(
                     'Ngày: ${_formatDate(invoice.createdAt)}',
-                    style: pw.TextStyle(fontSize: 10, font: font),
+                    style: _createTextStyle(
+                      fontSize: 10,
+                      font: font,
+                    ),
                   ),
                 ],
               ),
@@ -126,7 +148,11 @@ class InvoiceScreen extends ConsumerWidget {
                         child: pw.Center(
                           child: pw.Text(
                             'TT',
-                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 8, font: font),
+                            style: _createTextStyle(
+                              fontSize: 8,
+                              fontWeight: pw.FontWeight.bold,
+                              font: font,
+                            ),
                           ),
                         ),
                       ),
@@ -136,7 +162,11 @@ class InvoiceScreen extends ConsumerWidget {
                         child: pw.Center(
                           child: pw.Text(
                             'SL x TÊN HÀNG',
-                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 8, font: font),
+                            style: _createTextStyle(
+                              fontSize: 8,
+                              fontWeight: pw.FontWeight.bold,
+                              font: font,
+                            ),
                           ),
                         ),
                       ),
@@ -146,7 +176,11 @@ class InvoiceScreen extends ConsumerWidget {
                         child: pw.Center(
                           child: pw.Text(
                             'ĐƠN GIÁ',
-                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 8, font: font),
+                            style: _createTextStyle(
+                              fontSize: 8,
+                              fontWeight: pw.FontWeight.bold,
+                              font: font,
+                            ),
                           ),
                         ),
                       ),
@@ -156,7 +190,11 @@ class InvoiceScreen extends ConsumerWidget {
                         child: pw.Center(
                           child: pw.Text(
                             'THÀNH TIỀN',
-                            style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 8, font: font),
+                            style: _createTextStyle(
+                              fontSize: 8,
+                              fontWeight: pw.FontWeight.bold,
+                              font: font,
+                            ),
                           ),
                         ),
                       ),
@@ -174,7 +212,10 @@ class InvoiceScreen extends ConsumerWidget {
                             child: pw.Center(
                               child: pw.Text(
                                 '${index + 1}',
-                                style: pw.TextStyle(fontSize: 7, font: font),
+                                style: _createTextStyle(
+                                  fontSize: 7,
+                                  font: font,
+                                ),
                               ),
                             ),
                           ),
@@ -193,7 +234,10 @@ class InvoiceScreen extends ConsumerWidget {
                             child: pw.Center(
                               child: pw.Text(
                                 '${_formatNumber(item.price.toInt())} VNĐ',
-                                style: pw.TextStyle(fontSize: 7, font: font),
+                                style: _createTextStyle(
+                                  fontSize: 7,
+                                  font: font,
+                                ),
                               ),
                             ),
                           ),
@@ -203,7 +247,10 @@ class InvoiceScreen extends ConsumerWidget {
                             child: pw.Center(
                               child: pw.Text(
                                 '${_formatNumber(item.total.toInt())} VNĐ',
-                                style: pw.TextStyle(fontSize: 7, font: font),
+                                style: _createTextStyle(
+                                  fontSize: 7,
+                                  font: font,
+                                ),
                               ),
                             ),
                           ),
@@ -219,7 +266,10 @@ class InvoiceScreen extends ConsumerWidget {
                             child: pw.Center(
                               child: pw.Text(
                                 '${index + 1}',
-                                style: pw.TextStyle(fontSize: 7, font: font),
+                                style: _createTextStyle(
+                                  fontSize: 7,
+                                  font: font,
+                                ),
                               ),
                             ),
                           ),
@@ -249,29 +299,11 @@ class InvoiceScreen extends ConsumerWidget {
                 alignment: pw.Alignment.centerRight,
                 child: pw.Text(
                   'TỔNG TIỀN: ${_formatNumber(invoice.totalAmount.toInt())} VNĐ',
-                  style: pw.TextStyle(
+                  style: _createTextStyle(
                     fontSize: 12,
                     fontWeight: pw.FontWeight.bold,
                     font: font,
                   ),
-                ),
-              ),
-              
-              pw.Spacer(),
-              
-              // Footer
-              pw.Center(
-                child: pw.Column(
-                  children: [
-                    pw.Text(
-                      'CẢM ƠN QUÝ KHÁCH ĐÃ MUA HÀNG!',
-                      style: pw.TextStyle(fontSize: 8, font: font),
-                    ),
-                    pw.Text(
-                      'HẸN GẶP LẠI!',
-                      style: pw.TextStyle(fontSize: 8, font: font),
-                    ),
-                  ],
                 ),
               ),
             ],
@@ -291,6 +323,18 @@ class InvoiceScreen extends ConsumerWidget {
     return number.toString().replaceAllMapped(
       RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
       (Match m) => '${m[1]}.',
+    );
+  }
+
+  pw.TextStyle _createTextStyle({
+    required double fontSize,
+    pw.FontWeight? fontWeight,
+    pw.Font? font,
+  }) {
+    return pw.TextStyle(
+      fontSize: fontSize,
+      fontWeight: fontWeight,
+      font: font,
     );
   }
 

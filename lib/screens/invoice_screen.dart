@@ -253,27 +253,25 @@ class InvoiceScreen extends ConsumerWidget {
                           ),
                           pw.Container(
                             height: 20,
-                            padding: const pw.EdgeInsets.all(2),
-                            child: pw.Center(
-                              child: pw.Text(
-                                '${_formatNumber(item.price.toInt())}',
-                                style: _createTextStyle(
-                                  fontSize: 10,
-                                  font: regularFont,
-                                ),
+                            padding: const pw.EdgeInsets.only(left: 2, top: 2, right: 12, bottom: 2),
+                            alignment: pw.Alignment.centerRight,
+                            child: pw.Text(
+                              '${_formatNumber(item.price.toInt())}',
+                              style: _createTextStyle(
+                                fontSize: 10,
+                                font: regularFont,
                               ),
                             ),
                           ),
                           pw.Container(
                             height: 20,
-                            padding: const pw.EdgeInsets.all(2),
-                            child: pw.Center(
-                              child: pw.Text(
-                                '${_formatNumber(item.total.toInt())}',
-                                style: _createTextStyle(
-                                  fontSize: 10,
-                                  font: regularFont,
-                                ),
+                            padding: const pw.EdgeInsets.only(left: 2, top: 2, right: 12, bottom: 2),
+                            alignment: pw.Alignment.centerRight,
+                            child: pw.Text(
+                              '${_formatNumber(item.total.toInt())}',
+                              style: _createTextStyle(
+                                fontSize: 10,
+                                font: regularFont,
                               ),
                             ),
                           ),

@@ -331,7 +331,7 @@ class _OrderFormScreenState extends ConsumerState<OrderFormScreen> {
               
               // Company Info
               pw.Text(
-                'ĐC: 139/1 Tôn Đản, TP. Đà Nẵng * ĐT: 0905070472 - 0344678772',
+                'ĐC: 139/1 Tôn Đản, TP. Đà Nẵng * ĐT: 0905.070.472 - 0344.678.772',
                 style: _createTextStyle(
                 fontSize: 12,
                 font: regularFont,

@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
+import 'package:pdf/widgets.dart' as pw;
 import '../models/app_state.dart';
 import '../models/invoice_model.dart';
 import '../utils/order_parser.dart';
@@ -247,15 +251,11 @@ class _OrderFormScreenState extends ConsumerState<OrderFormScreen> {
                   ),
                   const SizedBox(width: 12),
                   ElevatedButton.icon(
-                    onPressed: () {
-                      _customerNameController.clear();
-                      _orderInfoController.clear();
-                      _clearSavedData();
-                    },
-                    icon: const Icon(Icons.clear),
-                    label: const Text('Xóa Form'),
+                    onPressed: () => _printBlankInvoice(context),
+                    icon: const Icon(Icons.print_outlined),
+                    label: const Text('In Hóa Đơn Trống'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.grey,
+                      backgroundColor: Colors.blue,
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(vertical: 16),
                       shape: RoundedRectangleBorder(
@@ -269,6 +269,263 @@ class _OrderFormScreenState extends ConsumerState<OrderFormScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void _printBlankInvoice(BuildContext context) async {
+    await Printing.layoutPdf(
+      onLayout: (format) async => await _generateBlankPdf(),
+    );
+  }
+
+  Future<Uint8List> _generateBlankPdf() async {
+    final pdf = pw.Document();
+    
+    // Tải font Carlito (tương tự Calibri) từ assets - hoạt động offline trong APK
+    pw.Font? regularFont;
+    pw.Font? boldFont;
+    
+    try {
+      // Tải font Carlito Regular và Bold từ assets
+      final regularFontData = await rootBundle.load("assets/fonts/Carlito-Regular.ttf");
+      final boldFontData = await rootBundle.load("assets/fonts/Carlito-Bold.ttf");
+      
+      regularFont = pw.Font.ttf(regularFontData);
+      boldFont = pw.Font.ttf(boldFontData);
+      print('✅ Loaded Carlito fonts from assets - Vietnamese supported, works offline');
+    } catch (e) {
+      print('❌ Cannot load Carlito font from assets: $e');
+      
+      // Fallback to Noto Sans from assets
+      try {
+        final notoFontData = await rootBundle.load("assets/fonts/NotoSans-Regular.ttf");
+        regularFont = pw.Font.ttf(notoFontData);
+        boldFont = pw.Font.ttf(notoFontData); // Sử dụng cùng font cho bold
+        print('✅ Loaded Noto Sans font as fallback from assets');
+      } catch (e2) {
+        print('❌ Cannot load any font from assets: $e2');
+        print('⚠️ Using default PDF font - Vietnamese characters may not display correctly');
+      }
+    }
+    
+    pdf.addPage(
+      pw.Page(
+        pageFormat: PdfPageFormat.a5,
+        margin: const pw.EdgeInsets.all(15),
+        build: (context) {
+          return pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              // Header
+              pw.Center(
+                child: pw.Text(
+                  'BÁNH KẸO HÙNG CHÍNH',
+                  style: _createTextStyle(
+                    fontSize: 20,
+                    font: boldFont, // Sử dụng boldFont cho tiêu đề
+                  ),
+                ),
+              ),
+              
+              pw.SizedBox(height: 5),
+              
+              // Company Info
+              pw.Text(
+                'ĐC: 139/1 Tôn Đản, TP. Đà Nẵng * ĐT: 0905070472 - 0344678772',
+                style: _createTextStyle(
+                fontSize: 12,
+                font: regularFont,
+                ),
+                textAlign: pw.TextAlign.center,
+              ),
+              
+              pw.SizedBox(height: 3),
+              
+              pw.Text(
+                'Chuyên bán: BÁNH ĐẬU XANH, BÁNH DỪA NƯỚNG, KHÔ MÈ, MÈ XỬNG, KẸO ĐẬU,',
+                style: _createTextStyle(
+                  fontSize: 10,
+                  font: regularFont,
+                ),
+                textAlign: pw.TextAlign.center,
+              ),
+              pw.Text(
+                'KẸO DỒI, BẮP, NUI, ME, CỐM, THÈO LÈO, CHUỐI SẤY, BÁNH THÁNH, BÁNH MEN...',
+                style: _createTextStyle(
+                  fontSize: 10,
+                  font: regularFont,
+                ),
+                textAlign: pw.TextAlign.center,
+              ),
+              
+              pw.SizedBox(height: 10),
+              
+              // Customer and Date Info - BLANK with underscores
+              pw.Row(
+                mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+                children: [
+                  pw.Text(
+                    'Khách hàng: _______________________',
+                    style: _createTextStyle(
+                      fontSize: 10,
+                      font: regularFont,
+                    ),
+                  ),
+                  pw.Text(
+                    'Ngày: _______________',
+                    style: _createTextStyle(
+                      fontSize: 10,
+                      font: regularFont,
+                    ),
+                  ),
+                ],
+              ),
+              
+              pw.SizedBox(height: 10),
+              
+              // Items Table
+              pw.Table(
+                border: pw.TableBorder.all(color: PdfColors.black, width: 1),
+                columnWidths: const {
+                  0: pw.FixedColumnWidth(25),
+                  1: pw.FlexColumnWidth(4),
+                  2: pw.FlexColumnWidth(2),
+                  3: pw.FlexColumnWidth(2),
+                },
+                children: [
+                  // Header
+                  pw.TableRow(
+                    children: [
+                      pw.Container(
+                        height: 25,
+                        padding: const pw.EdgeInsets.all(3),
+                        decoration: const pw.BoxDecoration(
+                          color: PdfColors.grey300,
+                        ),
+                        child: pw.Center(
+                          child: pw.Text(
+                            'TT',
+                            style: _createTextStyle(
+                              fontSize: 10,
+                              font: boldFont,
+                            ),
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 25,
+                        padding: const pw.EdgeInsets.all(3),
+                        decoration: const pw.BoxDecoration(
+                          color: PdfColors.grey300,
+                        ),
+                        child: pw.Center(
+                          child: pw.Text(
+                            'SL x TÊN HÀNG',
+                            style: _createTextStyle(
+                              fontSize: 10,
+                              font: boldFont,
+                            ),
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 25,
+                        padding: const pw.EdgeInsets.all(3),
+                        decoration: const pw.BoxDecoration(
+                          color: PdfColors.grey300,
+                        ),
+                        child: pw.Center(
+                          child: pw.Text(
+                            'ĐƠN GIÁ',
+                            style: _createTextStyle(
+                              fontSize: 10,
+                              font: boldFont,
+                            ),
+                          ),
+                        ),
+                      ),
+                      pw.Container(
+                        height: 25,
+                        padding: const pw.EdgeInsets.all(3),
+                        decoration: const pw.BoxDecoration(
+                          color: PdfColors.grey300,
+                        ),
+                        child: pw.Center(
+                          child: pw.Text(
+                            'THÀNH TIỀN',
+                            style: _createTextStyle(
+                              fontSize: 10,
+                              font: boldFont,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Empty rows for filling by hand
+                  ...List.generate(20, (index) {
+                    return pw.TableRow(
+                      children: [
+                        pw.Container(
+                          height: 20,
+                          padding: const pw.EdgeInsets.all(2),
+                          child: pw.Center(
+                            child: pw.Text(
+                              '${index + 1}',
+                              style: _createTextStyle(
+                                fontSize: 10,
+                                font: regularFont,
+                              ),
+                            ),
+                          ),
+                        ),
+                        pw.Container(height: 20), // Empty cell for product name
+                        pw.Container(height: 20), // Empty cell for unit price
+                        pw.Container(height: 20), // Empty cell for total
+                      ],
+                    );
+                  }),
+                ],
+              ),
+              
+              pw.SizedBox(height: 5),
+              
+              // Total line
+              pw.Container(
+                width: double.infinity,
+                height: 1,
+                color: PdfColors.black,
+              ),
+              
+              pw.SizedBox(height: 5),
+              
+              // Total Amount - BLANK
+              pw.Container(
+                alignment: pw.Alignment.centerRight,
+                child: pw.Text(
+                  'TỔNG TIỀN: ____________________ VNĐ',
+                  style: _createTextStyle(
+                    fontSize: 12,
+                    font: boldFont, // Sử dụng boldFont cho tổng tiền
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+    
+    return pdf.save();
+  }
+
+  pw.TextStyle _createTextStyle({
+    required double fontSize,
+    pw.Font? font,
+  }) {
+    return pw.TextStyle(
+      fontSize: fontSize,
+      font: font,
     );
   }
 }

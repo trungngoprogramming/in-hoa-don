@@ -14,6 +14,13 @@ rootProject.layout.buildDirectory.value(newBuildDir)
 subprojects {
     val newSubprojectBuildDir: Directory = newBuildDir.dir(project.name)
     project.layout.buildDirectory.value(newSubprojectBuildDir)
+    
+    // Ensure all subprojects use Java 17 toolchain
+    plugins.withType<JavaPlugin> {
+        configure<JavaPluginExtension> {
+            toolchain.languageVersion.set(JavaLanguageVersion.of(17))
+        }
+    }
 }
 subprojects {
     project.evaluationDependsOn(":app")

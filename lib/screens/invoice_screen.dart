@@ -48,7 +48,7 @@ class InvoiceScreen extends ConsumerWidget {
     
     try {
       // Tải font Carlito Regular và Bold từ assets
-      final regularFontData = await rootBundle.load("assets/fonts/Carlito-Regular.ttf");
+      final regularFontData = await rootBundle.load("assets/fonts/NotoSans-Regular.ttf");
       final boldFontData = await rootBundle.load("assets/fonts/Carlito-Bold.ttf");
       
       regularFont = pw.Font.ttf(regularFontData);

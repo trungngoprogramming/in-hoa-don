@@ -256,7 +256,7 @@ class InvoiceScreen extends ConsumerWidget {
                             padding: const pw.EdgeInsets.all(2),
                             child: pw.Center(
                               child: pw.Text(
-                                '${_formatNumber(item.price.toInt())} VNĐ',
+                                '${_formatNumber(item.price.toInt())}',
                                 style: _createTextStyle(
                                   fontSize: 10,
                                   font: regularFont,
@@ -269,7 +269,7 @@ class InvoiceScreen extends ConsumerWidget {
                             padding: const pw.EdgeInsets.all(2),
                             child: pw.Center(
                               child: pw.Text(
-                                '${_formatNumber(item.total.toInt())} VNĐ',
+                                '${_formatNumber(item.total.toInt())}',
                                 style: _createTextStyle(
                                   fontSize: 10,
                                   font: regularFont,
@@ -321,7 +321,7 @@ class InvoiceScreen extends ConsumerWidget {
               pw.Container(
                 alignment: pw.Alignment.centerRight,
                 child: pw.Text(
-                  'TỔNG TIỀN: ${_formatNumber(invoice.totalAmount.toInt())} VNĐ',
+                  'TỔNG TIỀN: ${_formatNumber(invoice.totalAmount.toInt())}',
                   style: _createTextStyle(
                     fontSize: 12,
                     font: boldFont, // Sử dụng boldFont cho tổng tiền

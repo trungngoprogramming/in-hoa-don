@@ -503,7 +503,7 @@ class _OrderFormScreenState extends ConsumerState<OrderFormScreen> {
               pw.Container(
                 alignment: pw.Alignment.centerRight,
                 child: pw.Text(
-                  'TỔNG TIỀN: ____________________ VNĐ',
+                  'TỔNG TIỀN: ____________________',
                   style: _createTextStyle(
                     fontSize: 12,
                     font: boldFont, // Sử dụng boldFont cho tổng tiền

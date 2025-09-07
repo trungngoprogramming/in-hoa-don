@@ -38,11 +38,11 @@ class OrderParser {
 
   static String formatPrice(double price) {
     final formatter = NumberFormat('#,###', 'vi_VN');
-    return '${formatter.format(price.toInt())} VNĐ';
+    return '${formatter.format(price.toInt())}';
   }
 
   static String formatTotal(double total) {
     final formatter = NumberFormat('#,###', 'vi_VN');
-    return '${formatter.format(total.toInt())} VNĐ';
+    return '${formatter.format(total.toInt())}';
   }
 }

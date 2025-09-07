@@ -10,8 +10,9 @@ class OrderParser {
       final trimmedLine = line.trim();
       if (trimmedLine.isEmpty) continue;
 
-      // Regex pattern để match: "số_lượng tên_sản_phẩm x đơn_giá"
-      final regex = RegExp(r'^(\d+)\s+(.+?)\s+x\s+(\d+(?:\.\d+)?)$');
+      // Regex pattern để match: "số_lượng tên_sản_phẩm x đơn_giá" 
+      // Hỗ trợ linh hoạt khoảng trắng: "20 leo x1.2", "20 leo x 1.2", "20 leo  x  1.2"
+      final regex = RegExp(r'^(\d+)\s+(.+?)\s*x\s*(\d+(?:\.\d+)?)$');
       final match = regex.firstMatch(trimmedLine);
 
       if (match != null) {

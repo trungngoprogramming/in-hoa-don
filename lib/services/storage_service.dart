@@ -47,6 +47,21 @@ class StorageService {
     }
   }
 
+  // Cập nhật hóa đơn
+  static Future<void> updateInvoice(DateTime date, int index, InvoiceModel updatedInvoice) async {
+    final prefs = await SharedPreferences.getInstance();
+    final dateKey = DateFormat('yyyy-MM-dd').format(date);
+    final key = '$_invoicePrefix$dateKey';
+    
+    final invoicesJson = prefs.getStringList(key) ?? [];
+    
+    if (index < invoicesJson.length) {
+      // Cập nhật hóa đơn tại index cụ thể
+      invoicesJson[index] = jsonEncode(updatedInvoice.toJson());
+      await prefs.setStringList(key, invoicesJson);
+    }
+  }
+
   // Lưu thông tin form tạm thời
   static Future<void> saveFormData(String customerName, String orderInfo) async {
     final prefs = await SharedPreferences.getInstance();

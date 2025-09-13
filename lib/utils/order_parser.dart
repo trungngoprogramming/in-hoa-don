@@ -37,12 +37,16 @@ class OrderParser {
   }
 
   static String formatPrice(double price) {
-    final formatter = NumberFormat('#,###', 'vi_VN');
-    return '${formatter.format(price.toInt())}';
+    final formatter = NumberFormat('#,###');
+    final formatted = formatter.format(price.toInt());
+    // Thay dấu phẩy bằng dấu chấm để hiển thị như 1.200
+    return formatted.replaceAll(',', '.');
   }
 
   static String formatTotal(double total) {
-    final formatter = NumberFormat('#,###', 'vi_VN');
-    return '${formatter.format(total.toInt())}';
+    final formatter = NumberFormat('#,###');
+    final formatted = formatter.format(total.toInt());
+    // Thay dấu phẩy bằng dấu chấm để hiển thị như 15.000
+    return formatted.replaceAll(',', '.');
   }
 }

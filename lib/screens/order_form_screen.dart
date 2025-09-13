@@ -8,10 +8,12 @@ import '../models/app_state.dart';
 import '../models/invoice_model.dart';
 import '../utils/order_parser.dart';
 import '../services/storage_service.dart';
-import 'edit_order_screen.dart';
+import 'view_order_screen.dart';
 
 class OrderFormScreen extends ConsumerStatefulWidget {
-  const OrderFormScreen({super.key});
+  const OrderFormScreen({super.key, this.editData});
+  
+  final Map<String, String>? editData;
 
   @override
   ConsumerState<OrderFormScreen> createState() => _OrderFormScreenState();
@@ -26,7 +28,12 @@ class _OrderFormScreenState extends ConsumerState<OrderFormScreen> {
   @override
   void initState() {
     super.initState();
-    _loadSavedData();
+    if (widget.editData != null) {
+      // Nếu có dữ liệu edit, sử dụng nó thay vì load saved data
+      _loadEditData();
+    } else {
+      _loadSavedData();
+    }
   }
 
   @override
@@ -40,6 +47,13 @@ class _OrderFormScreenState extends ConsumerState<OrderFormScreen> {
     final formData = await StorageService.getFormData();
     _customerNameController.text = formData['customerName'] ?? '';
     _orderInfoController.text = formData['orderInfo'] ?? '';
+  }
+
+  void _loadEditData() {
+    if (widget.editData != null) {
+      _customerNameController.text = widget.editData!['customerName'] ?? '';
+      _orderInfoController.text = widget.editData!['orderText'] ?? '';
+    }
   }
 
   Future<void> _saveData() async {
@@ -89,7 +103,9 @@ class _OrderFormScreenState extends ConsumerState<OrderFormScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => const EditOrderScreen(),
+          builder: (context) => ViewOrderScreen(
+            editData: widget.editData, // Truyền editData sang ViewOrderScreen
+          ),
         ),
       );
     } catch (e) {

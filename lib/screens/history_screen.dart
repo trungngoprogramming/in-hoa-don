@@ -5,6 +5,7 @@ import '../models/invoice_model.dart';
 import '../models/app_state.dart';
 import '../services/storage_service.dart';
 import 'invoice_screen.dart';
+import 'order_form_screen.dart';
 
 class HistoryScreen extends ConsumerStatefulWidget {
   const HistoryScreen({super.key});
@@ -78,6 +79,47 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
         builder: (context) => const InvoiceScreen(),
       ),
     );
+  }
+
+  void _editInvoice(InvoiceModel invoice) {
+    final orderText = _convertInvoiceToOrderText(invoice);
+    final invoiceIndex = invoices.indexOf(invoice);
+    
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => OrderFormScreen(
+          editData: {
+            'customerName': invoice.customerName,
+            'orderText': orderText,
+            'isEditMode': 'true',
+            'editDate': selectedDate.toIso8601String(),
+            'editIndex': invoiceIndex.toString(),
+          },
+        ),
+      ),
+    ).then((_) {
+      // Reload danh sách sau khi edit xong
+      _loadInvoices();
+    });
+  }
+
+  String _convertInvoiceToOrderText(InvoiceModel invoice) {
+    // Chuyển đổi InvoiceItems thành format text như "12 leo x1.2"
+    final orderLines = <String>[];
+    
+    for (final item in invoice.items) {
+      // Chuyển đổi giá từ VND về nghìn đồng
+      final priceInK = item.price / 1000;
+      final formattedPrice = priceInK % 1 == 0 
+          ? priceInK.toInt().toString()
+          : priceInK.toString();
+      
+      // Format: "quantity productName x price"
+      orderLines.add('${item.quantity} ${item.name} x$formattedPrice');
+    }
+    
+    return orderLines.join('\n');
   }
 
   @override
@@ -195,6 +237,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                               trailing: PopupMenuButton<String>(
                                 onSelected: (value) {
                                   switch (value) {
+                                    case 'edit':
+                                      _editInvoice(invoice);
+                                      break;
                                     case 'print':
                                       _printInvoice(invoice);
                                       break;
@@ -204,6 +249,16 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
                                   }
                                 },
                                 itemBuilder: (context) => [
+                                  const PopupMenuItem(
+                                    value: 'edit',
+                                    child: Row(
+                                      children: [
+                                        Icon(Icons.edit, color: Colors.green),
+                                        SizedBox(width: 8),
+                                        Text('Sửa'),
+                                      ],
+                                    ),
+                                  ),
                                   const PopupMenuItem(
                                     value: 'print',
                                     child: Row(
@@ -237,7 +292,10 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
   }
 
   String _formatPrice(double price) {
-    return '${price.toStringAsFixed(0)} VND';
+    final formatter = NumberFormat('#,###');
+    final formatted = formatter.format(price.toInt());
+    // Thay dấu phẩy bằng dấu chấm để hiển thị như 15.000
+    return '${formatted.replaceAll(',', '.')} VND';
   }
 
   void _showDeleteDialog(int index) {

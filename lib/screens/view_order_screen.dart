@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/app_state.dart';
-import '../models/invoice_model.dart';
 import '../utils/order_parser.dart';
 import '../services/storage_service.dart';
 import 'invoice_screen.dart';
@@ -33,7 +32,8 @@ class _ViewOrderScreenState extends ConsumerState<ViewOrderScreen> {
         final editIndex = int.parse(widget.editData!['editIndex']!);
         
         await StorageService.updateInvoice(editDate, editIndex, invoice);
-        
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Hóa đơn đã được cập nhật'),
@@ -43,7 +43,8 @@ class _ViewOrderScreenState extends ConsumerState<ViewOrderScreen> {
       } else {
         // Tạo hóa đơn mới
         await StorageService.saveInvoice(invoice);
-        
+        if (!mounted) return;
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Hóa đơn đã được lưu vào lịch sử'),
@@ -52,6 +53,7 @@ class _ViewOrderScreenState extends ConsumerState<ViewOrderScreen> {
         );
       }
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Lỗi khi lưu hóa đơn: $e'),
@@ -59,7 +61,8 @@ class _ViewOrderScreenState extends ConsumerState<ViewOrderScreen> {
         ),
       );
     }
-    
+    if (!mounted) return;
+
     Navigator.push(
       context,
       MaterialPageRoute(

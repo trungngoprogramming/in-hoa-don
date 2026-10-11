@@ -208,9 +208,9 @@ class _OrderFormScreenState extends ConsumerState<OrderFormScreen> {
                       Container(
                         padding: const EdgeInsets.all(12),
                         decoration: BoxDecoration(
-                          color: Colors.blue.withOpacity(0.1),
+                          color: Colors.blue.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
-                          border: Border.all(color: Colors.blue.withOpacity(0.3)),
+                          border: Border.all(color: Colors.blue.withValues(alpha: 0.3)),
                         ),
                         child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -308,19 +308,19 @@ class _OrderFormScreenState extends ConsumerState<OrderFormScreen> {
       
       regularFont = pw.Font.ttf(regularFontData);
       boldFont = pw.Font.ttf(boldFontData);
-      print('✅ Loaded Carlito fonts from assets - Vietnamese supported, works offline');
+      debugPrint('✅ Loaded Carlito fonts from assets - Vietnamese supported, works offline');
     } catch (e) {
-      print('❌ Cannot load Carlito font from assets: $e');
+      debugPrint('❌ Cannot load Carlito font from assets: $e');
       
       // Fallback to Noto Sans from assets
       try {
         final notoFontData = await rootBundle.load("assets/fonts/NotoSans-Regular.ttf");
         regularFont = pw.Font.ttf(notoFontData);
         boldFont = pw.Font.ttf(notoFontData); // Sử dụng cùng font cho bold
-        print('✅ Loaded Noto Sans font as fallback from assets');
+        debugPrint('✅ Loaded Noto Sans font as fallback from assets');
       } catch (e2) {
-        print('❌ Cannot load any font from assets: $e2');
-        print('⚠️ Using default PDF font - Vietnamese characters may not display correctly');
+        debugPrint('❌ Cannot load any font from assets: $e2');
+        debugPrint('⚠️ Using default PDF font - Vietnamese characters may not display correctly');
       }
     }
     

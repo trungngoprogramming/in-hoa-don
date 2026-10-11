@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:printing/printing.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
-import 'dart:typed_data';
 import '../models/app_state.dart';
 import '../models/invoice_model.dart';
 
@@ -53,19 +52,19 @@ class InvoiceScreen extends ConsumerWidget {
       
       regularFont = pw.Font.ttf(regularFontData);
       boldFont = pw.Font.ttf(boldFontData);
-      print('✅ Loaded Carlito fonts from assets - Vietnamese supported, works offline');
+      debugPrint('✅ Loaded Carlito fonts from assets - Vietnamese supported, works offline');
     } catch (e) {
-      print('❌ Cannot load Carlito font from assets: $e');
+      debugPrint('❌ Cannot load Carlito font from assets: $e');
       
       // Fallback to Noto Sans from assets
       try {
         final notoFontData = await rootBundle.load("assets/fonts/NotoSans-Regular.ttf");
         regularFont = pw.Font.ttf(notoFontData);
         boldFont = pw.Font.ttf(notoFontData); // Sử dụng cùng font cho bold
-        print('✅ Loaded Noto Sans font as fallback from assets');
+        debugPrint('✅ Loaded Noto Sans font as fallback from assets');
       } catch (e2) {
-        print('❌ Cannot load any font from assets: $e2');
-        print('⚠️ Using default PDF font - Vietnamese characters may not display correctly');
+        debugPrint('❌ Cannot load any font from assets: $e2');
+        debugPrint('⚠️ Using default PDF font - Vietnamese characters may not display correctly');
       }
     }
     
@@ -256,7 +255,7 @@ class InvoiceScreen extends ConsumerWidget {
                             padding: const pw.EdgeInsets.only(left: 2, top: 2, right: 12, bottom: 2),
                             alignment: pw.Alignment.centerRight,
                             child: pw.Text(
-                              '${_formatNumber(item.price.toInt())}',
+                              _formatNumber(item.price.toInt()),
                               style: _createTextStyle(
                                 fontSize: 10,
                                 font: regularFont,
@@ -268,7 +267,7 @@ class InvoiceScreen extends ConsumerWidget {
                             padding: const pw.EdgeInsets.only(left: 2, top: 2, right: 12, bottom: 2),
                             alignment: pw.Alignment.centerRight,
                             child: pw.Text(
-                              '${_formatNumber(item.total.toInt())}',
+                              _formatNumber(item.total.toInt()),
                               style: _createTextStyle(
                                 fontSize: 10,
                                 font: regularFont,

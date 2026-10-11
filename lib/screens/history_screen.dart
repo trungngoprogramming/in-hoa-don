@@ -33,6 +33,7 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
     try {
       invoices = await StorageService.getInvoicesByDate(selectedDate);
     } catch (e) {
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Lỗi khi tải dữ liệu: $e'),
@@ -60,10 +61,6 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
       });
       _loadInvoices();
     }
-  }
-
-  Future<void> _saveInvoice(InvoiceModel invoice) async {
-    await StorageService.saveInvoice(invoice);
   }
 
   Future<void> _deleteInvoice(int index) async {
@@ -136,9 +133,9 @@ class _HistoryScreenState extends ConsumerState<HistoryScreen> {
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.blue.withOpacity(0.1),
+              color: Colors.blue.withValues(alpha: 0.1),
               border: Border(
-                bottom: BorderSide(color: Colors.grey.withOpacity(0.3)),
+                bottom: BorderSide(color: Colors.grey.withValues(alpha: 0.3)),
               ),
             ),
             child: Row(

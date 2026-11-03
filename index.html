@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>In Hóa Đơn - Bánh Kẹo Hùng Chính</title>
+  <meta name="description" content="Nhập đơn hàng và in hóa đơn A5 cho Bánh Kẹo Hùng Chính. Chạy ngay trên điện thoại, không cần máy chủ.">
+  <meta name="theme-color" content="#2196f3">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Hóa Đơn">
+  <meta name="format-detection" content="telephone=no">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" type="image/png" href="icons/favicon.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+  <!-- Biểu tượng Material Icons (Apache 2.0) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <symbol id="i-receipt" viewBox="0 0 24 24"><path d="M19.5 3.5 18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2v14H3v3c0 1.66 1.34 3 3 3h12c1.66 0 3-1.34 3-3V2l-1.5 1.5zM19 19c0 .55-.45 1-1 1s-1-.45-1-1v-3H8V5h11v14z"/><path d="M9 7h6v2H9zm7 0h2v2h-2zm-7 3h6v2H9zm7 0h2v2h-2z"/></symbol>
+    <symbol id="i-cart-add" viewBox="0 0 24 24"><path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z"/></symbol>
+    <symbol id="i-history" viewBox="0 0 24 24"><path d="M13 3a9 9 0 0 0-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42A8.954 8.954 0 0 0 13 21a9 9 0 0 0 0-18zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></symbol>
+    <symbol id="i-person" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1.003 1.003 0 0 0 20 4H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></symbol>
+    <symbol id="i-forward" viewBox="0 0 24 24"><path d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></symbol>
+    <symbol id="i-print" viewBox="0 0 24 24"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></symbol>
+    <symbol id="i-edit" viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04a.996.996 0 0 0 0-1.41l-2.34-2.34a.996.996 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></symbol>
+    <symbol id="i-delete" viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></symbol>
+    <symbol id="i-event" viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></symbol>
+  </svg>
+
+  <!-- Màn hình chính -->
+  <section class="view" id="view-home">
+    <header class="app-bar app-bar-center">
+      <h1>Ứng Dụng In Hóa Đơn</h1>
+    </header>
+    <div class="home">
+      <svg class="home-logo" aria-hidden="true"><use href="#i-receipt"/></svg>
+      <h2>Bánh Kẹo Hùng Chính</h2>
+      <p>Hệ thống quản lý và in hóa đơn</p>
+      <button type="button" class="btn btn-home" data-action="new-order">
+        <svg class="icon" aria-hidden="true"><use href="#i-cart-add"/></svg>Tạo Đơn Hàng Mới
+      </button>
+      <button type="button" class="btn btn-home" data-action="open-history">
+        <svg class="icon" aria-hidden="true"><use href="#i-history"/></svg>Xem Lịch Sử
+      </button>
+    </div>
+  </section>
+
+  <!-- Nhập đơn hàng -->
+  <section class="view" id="view-order" hidden>
+    <header class="app-bar">
+      <button type="button" class="icon-btn" data-back="#/" aria-label="Quay lại"><svg class="icon"><use href="#i-back"/></svg></button>
+      <h1>Nhập Thông Tin Đơn Hàng</h1>
+    </header>
+    <form class="content" id="order-form" novalidate autocomplete="off">
+      <div class="card">
+        <h2>Thông Tin Khách Hàng</h2>
+        <div class="field">
+          <label for="customer-name">Tên Khách Hàng</label>
+          <div class="field-box">
+            <svg class="icon" aria-hidden="true"><use href="#i-person"/></svg>
+            <input id="customer-name" name="customerName" type="text" autocorrect="off" spellcheck="false" enterkeyhint="next" aria-describedby="customer-name-error">
+          </div>
+          <p class="field-error" id="customer-name-error"></p>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Thông Tin Đơn Hàng</h2>
+        <div class="field">
+          <label for="order-text">Thông Tin Đơn Hàng</label>
+          <div class="field-box field-box-multiline">
+            <svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg>
+            <textarea id="order-text" name="orderText" rows="8" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Ví dụ:&#10;20 leo x 1.2&#10;30 bap x 2" aria-describedby="order-text-error"></textarea>
+          </div>
+          <p class="field-error" id="order-text-error"></p>
+        </div>
+        <div class="guide">
+          <strong>Hướng Dẫn Định Dạng:</strong>
+          <ul>
+            <li>20 leo x 1.2</li>
+            <li>30 bap x 2</li>
+            <li>15 me x 0.8</li>
+          </ul>
+          <em>Lưu ý: Đơn giá sẽ được nhân 1000 để chuyển sang VND</em>
+        </div>
+      </div>
+      <div class="form-actions">
+        <button type="submit" class="btn">Tiếp Tục<svg class="icon" aria-hidden="true"><use href="#i-forward"/></svg></button>
+        <button type="button" class="btn btn-outline" data-action="blank-invoice">
+          <svg class="icon" aria-hidden="true"><use href="#i-print"/></svg>In Hóa Đơn Trống
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- Xem lại đơn hàng trước khi in -->
+  <section class="view" id="view-review" hidden>
+    <header class="app-bar">
+      <button type="button" class="icon-btn" data-back="#/order" aria-label="Quay lại"><svg class="icon"><use href="#i-back"/></svg></button>
+      <h1>Xem Thông Tin Đơn Hàng</h1>
+      <button type="button" class="icon-btn" data-action="save-and-print" aria-label="In Hóa Đơn"><svg class="icon"><use href="#i-print"/></svg></button>
+    </header>
+    <div class="content">
+      <div class="card">
+        <h2>Thông Tin Khách Hàng</h2>
+        <div class="customer">
+          <svg class="icon icon-blue" aria-hidden="true"><use href="#i-person"/></svg>
+          <div>
+            <div class="muted">Tên Khách Hàng:</div>
+            <div class="customer-name" id="review-customer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Danh Sách Sản Phẩm</h2>
+        <table class="items-table">
+          <colgroup><col style="width:10%"><col style="width:16%"><col style="width:30%"><col style="width:22%"><col style="width:22%"></colgroup>
+          <thead><tr><th>TT</th><th>SL</th><th>Tên Sản Phẩm</th><th class="num">Đơn Giá</th><th class="num">Thành Tiền</th></tr></thead>
+          <tbody id="review-items"></tbody>
+        </table>
+      </div>
+      <div class="card total-card">
+        <h2>Tổng Cộng</h2>
+        <div class="total-amount" id="review-total"></div>
+      </div>
+      <button type="button" class="btn" data-action="save-and-print">
+        <svg class="icon" aria-hidden="true"><use href="#i-print"/></svg>In Hóa Đơn
+      </button>
+    </div>
+  </section>
+
+  <!-- Hóa đơn: xem trước, in, chia sẻ PDF -->
+  <section class="view" id="view-invoice" hidden>
+    <header class="app-bar">
+      <button type="button" class="icon-btn" data-back="#/" aria-label="Quay lại"><svg class="icon"><use href="#i-back"/></svg></button>
+      <h1 id="invoice-title">Hóa Đơn</h1>
+      <button type="button" class="icon-btn" data-action="print" aria-label="In Hóa Đơn" disabled><svg class="icon"><use href="#i-print"/></svg></button>
+    </header>
+    <div class="content invoice-content">
+      <p class="invoice-status" id="invoice-status" role="status"></p>
+      <div class="invoice-pages" id="invoice-pages"></div>
+    </div>
+    <div class="invoice-actions">
+      <p class="hint" id="invoice-hint" hidden>Trên iPhone: bấm <b>In Hóa Đơn</b> → chọn <b>In</b> (Print) trong bảng chia sẻ → chọn máy in. Máy in không hỗ trợ AirPrint thì chọn app của hãng máy in trong bảng chia sẻ.</p>
+      <div class="invoice-buttons">
+        <button type="button" class="btn" data-action="print" disabled>
+          <svg class="icon" aria-hidden="true"><use href="#i-print"/></svg>In Hóa Đơn
+        </button>
+        <button type="button" class="btn btn-outline" data-action="share" id="share-button" disabled>
+          <svg class="icon" aria-hidden="true"><use href="#i-share"/></svg>Chia sẻ PDF
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Lịch sử theo ngày -->
+  <section class="view" id="view-history" hidden>
+    <header class="app-bar">
+      <button type="button" class="icon-btn" data-back="#/" aria-label="Quay lại"><svg class="icon"><use href="#i-back"/></svg></button>
+      <h1>Lịch Sử Đơn Hàng</h1>
+    </header>
+    <div class="date-bar">
+      <svg class="icon icon-blue" aria-hidden="true"><use href="#i-event"/></svg>
+      <span class="date-label" id="history-date-label"></span>
+      <label class="btn btn-small date-button">
+        <svg class="icon" aria-hidden="true"><use href="#i-event"/></svg>Chọn Ngày
+        <input type="date" id="history-date" min="2020-01-01" aria-label="Chọn ngày xem lịch sử">
+      </label>
+    </div>
+    <div class="content" id="history-list"></div>
+  </section>
+
+  <div class="snackbar" id="snackbar" role="status" aria-live="polite"></div>
+
+  <dialog class="dialog" id="confirm-delete">
+    <form method="dialog">
+      <h2>Xác nhận xóa</h2>
+      <p>Bạn có chắc chắn muốn xóa hóa đơn này?</p>
+      <div class="dialog-actions">
+        <button type="submit" class="text-btn" value="cancel">Hủy</button>
+        <button type="submit" class="text-btn text-btn-danger" value="ok">Xóa</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="vendor/jspdf.umd.min.js" defer></script>
+  <script src="js/core.js" defer></script>
+  <script src="js/store.js" defer></script>
+  <script src="js/invoice.js" defer></script>
+  <script src="js/app.js" defer></script>
+</body>
+</html>
